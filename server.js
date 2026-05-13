@@ -14,9 +14,9 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send(`
-    <h1>🎟️ Event Ticketing API</h1>
-    <p>Welcome! The API is running.</p>
-    <p>All API routes start at <strong>/api</strong></p>
+    <h1>Event Ticketing API</h1>
+    <p>Welcome!!!!!</p>
+    <p>This is a simple API for managing events and bookings.</p>
   `);
 });
 
