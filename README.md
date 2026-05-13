@@ -5,11 +5,11 @@ A REST API for an event ticketing system built with Node.js, Express, MongoDB, a
 ## Installation
 
 1. Clone the repository
-   git clone https://github.com/yourusername/event-ticketing-api.git
-   cd event-ticketing-api
+  https://github.com/SrunKimSeng/Event-Ticketing-API.git
+  cd event-ticketing-api
 
 2. Install dependencies
-   npm install
+  npm install
 
 ## Setup
 
@@ -28,7 +28,7 @@ npm run dev
 
 ## Deployed API
 
-https://your-project-name.onrender.com
+https://event-ticketing-api-ncy2.onrender.com
 
 ## Endpoints
 
