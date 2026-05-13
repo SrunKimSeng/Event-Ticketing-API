@@ -1,7 +1,6 @@
 const Booking = require("../models/Booking");
 const Event = require("../models/Event");
 const QRCode = require("qrcode");
-const { sendBookingConfirmation } = require("../utils/mailer");
 
 // GET /api/bookings — logged in user's bookings only
 const getMyBookings = async (req, res, next) => {
@@ -66,13 +65,6 @@ const createBooking = async (req, res, next) => {
     // Update bookedSeats
     event.bookedSeats += quantity;
     await event.save();
-
-    // Send confirmation email
-    try {
-      await sendBookingConfirmation(req.user.email, req.user.name, event.title, quantity, booking._id);
-    } catch (mailErr) {
-      console.error("Email failed:", mailErr.message);
-    }
 
     res.status(201).json(booking);
   } catch (error) {
