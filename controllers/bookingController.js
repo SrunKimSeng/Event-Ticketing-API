@@ -1,5 +1,7 @@
 const Booking = require("../models/Booking");
 const Event = require("../models/Event");
+const QRCode = require("qrcode");
+const { sendBookingConfirmation } = require("../utils/mailer");
 
 // GET /api/bookings — logged in user's bookings only
 const getMyBookings = async (req, res, next) => {
@@ -55,9 +57,22 @@ const createBooking = async (req, res, next) => {
       quantity,
     });
 
+    // Generate QR code
+    const qrData = JSON.stringify({ bookingId: booking._id, userId: req.user._id, eventId });
+    const qrCode = await QRCode.toDataURL(qrData);
+    booking.qrCode = qrCode;
+    await booking.save();
+
     // Update bookedSeats
     event.bookedSeats += quantity;
     await event.save();
+
+    // Send confirmation email
+    try {
+      await sendBookingConfirmation(req.user.email, req.user.name, event.title, quantity, booking._id);
+    } catch (mailErr) {
+      console.error("Email failed:", mailErr.message);
+    }
 
     res.status(201).json(booking);
   } catch (error) {
@@ -65,4 +80,18 @@ const createBooking = async (req, res, next) => {
   }
 };
 
-module.exports = { getMyBookings, getBookingById, createBooking };
+// GET /api/bookings/validate/:qr
+const validateBooking = async (req, res, next) => {
+  try {
+    const booking = await Booking.findOne({ qrCode: req.params.qr })
+      .populate("event", "title date time venue");
+
+    if (!booking) return res.status(404).json({ error: "Invalid QR code" });
+
+    res.json({ valid: true, booking });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { getMyBookings, getBookingById, createBooking, validateBooking };

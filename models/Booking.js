@@ -5,6 +5,7 @@ const bookingSchema = new mongoose.Schema({
   event: { type: mongoose.Schema.Types.ObjectId, ref: "Event", required: true },
   quantity: { type: Number, required: true, min: 1 },
   bookingDate: { type: Date, default: Date.now },
+  qrCode: { type: String },
 });
 
 module.exports = mongoose.model("Booking", bookingSchema);

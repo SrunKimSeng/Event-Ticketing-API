@@ -39,7 +39,7 @@ POST /api/auth/login    - Login and receive a JWT token
 ### Events
 GET    /api/events          - Get all events
 GET    /api/events?category= - Filter by category
-GET    /api/events?date=     - Filter by date (YYYY-MM-DD)
+GET    /api/events?date=     - Filter by date
 GET    /api/events/:id       - Get event by ID
 POST   /api/events           - Create event (admin only)
 PUT    /api/events/:id       - Update event (admin only)
