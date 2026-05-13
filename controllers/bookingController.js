@@ -80,15 +80,25 @@ const createBooking = async (req, res, next) => {
   }
 };
 
-// GET /api/bookings/validate/:qr
+// GET /api/bookings/validate/:bookingId
 const validateBooking = async (req, res, next) => {
   try {
-    const booking = await Booking.findOne({ qrCode: req.params.qr })
-      .populate("event", "title date time venue");
+    const booking = await Booking.findById(req.params.bookingId)
+      .populate("event", "title date time venue")
+      .populate("user", "name email");
 
-    if (!booking) return res.status(404).json({ error: "Invalid QR code" });
+    if (!booking) return res.status(404).json({ error: "Invalid booking" });
 
-    res.json({ valid: true, booking });
+    res.json({ 
+      valid: true, 
+      booking: {
+        _id: booking._id,
+        user: booking.user,
+        event: booking.event,
+        quantity: booking.quantity,
+        bookingDate: booking.bookingDate,
+      }
+    });
   } catch (error) {
     next(error);
   }
