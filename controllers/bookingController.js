@@ -83,7 +83,8 @@ const createBooking = async (req, res, next) => {
 // GET /api/bookings/validate/:bookingId
 const validateBooking = async (req, res, next) => {
   try {
-    const booking = await Booking.findById(req.params.bookingId)
+    console.log("Validating:", req.params.qr);
+    const booking = await Booking.findById(req.params.qr)
       .populate("event", "title date time venue")
       .populate("user", "name email");
 
@@ -100,6 +101,7 @@ const validateBooking = async (req, res, next) => {
       }
     });
   } catch (error) {
+    console.error("Validate error:", error.message);
     next(error);
   }
 };
